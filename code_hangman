@@ -1,0 +1,70 @@
+import random
+import sys
+
+# game title
+print('H A N G M A N')
+# list of words and random choice
+words = ['python', 'java', 'kotlin', 'javascript']
+random_word = random.choice(words)
+dashed_word = '-' * len(random_word)
+
+# creating a lists
+list_random_word_orginal = list(random_word)
+list_random_word = list(random_word)
+list_dashed_word = list(dashed_word)
+# creating a sets
+set_inputed_letters = set()
+set_allowerd_characters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}
+# number of lives
+counter = 0
+while input('Type "play" to play the game, "exit" to quit: ') == 'play':
+    print()
+    print(dashed_word)
+    while True:
+        letter_input = input('Input a letter: ')
+        if len(letter_input) != 1:  # checking if the letter is single
+            print('You should input a single letter')
+            print()
+            print(''.join(list_dashed_word))  # print of joined dashed word
+            continue
+        elif letter_input not in set_allowerd_characters: # checking if the letter is lowercase
+            print('Please enter a lowercase English letter')
+            print()
+            print(''.join(list_dashed_word))  # print of joined dashed word
+            continue
+        elif letter_input in set_inputed_letters:  # checking if the letter have been already inputed
+            print('You\'ve already guessed this letter')
+            print()
+            print(''.join(list_dashed_word))  # print of joined dashed word
+            continue
+        elif letter_input in random_word:  # main program code
+            print()
+            number_letters = list_random_word.count(letter_input)  # number of inputed letters in the word
+            for _ in range(number_letters):  # nuber of loops equal to number of letters in the word
+                letter_position = list_random_word.index(letter_input)  # position of inputed letter
+                del list_random_word[letter_position]  # deletion of inputed letter from random word
+                list_random_word.insert(letter_position, '-')  # insertion of '-' in place of deleted letter in random word     
+                del list_dashed_word[letter_position]  # deletion of '-' with letter position from dashed word
+                list_dashed_word.insert(letter_position, letter_input)  # insertion of letter to dashed word
+            print(''.join(list_dashed_word))  # print of joined dashed word
+            if list_random_word_orginal == list_dashed_word:  # checking if all the leater have been already guessed
+                print('You guessed the word!')
+                print('You survived!')
+                break
+                sys.exit()
+            if counter == 8:  # checking if the maximium number of tries have been reached
+                print('You lost!')
+                break
+                sys.exit()
+        else:  # operations when letter doesn't appear in the word
+            counter += 1
+            print('That letter doesn\'t appear in the word')
+            if counter == 8:   # checking if the maximium number of tries have been reached
+                print('You lost!')
+                break
+                sys.exit()
+            print()
+            print(''.join(list_dashed_word))  # print of joined dashed word     
+        set_inputed_letters.add(letter_input)  # adding inputed letter to the set of all aleready added letters
+else:
+    sys.exit()
